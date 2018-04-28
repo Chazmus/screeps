@@ -33,7 +33,8 @@ let roleRunner = {
 
         if (creep.memory.mode === 'pickup') {
             if (!creep.memory.targetPickupId) {
-                creep.memory.targetPickupId = _.sample(pickupContainers).id;
+                let targetPickupId = _.sample(pickupContainers).id;
+                creep.memory.targetPickupId = targetPickupId ? targetPickupId : undefined
             }
             let targetContainer = Game.getObjectById(creep.memory.targetPickupId);
             screepUtilities.harvestFromContainerOrStorage(creep, targetContainer);

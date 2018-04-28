@@ -5,8 +5,8 @@ let roleBuilder = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
-        if (creep.room.name !== 'W6N8') {
-            const exitDir = Game.map.findExit(creep.room, 'W6N8');
+        if (creep.room.name !== 'W7N4') {
+            const exitDir = Game.map.findExit(creep.room, 'W7N4');
             const exit = creep.pos.findClosestByRange(exitDir);
             creep.moveTo(exit);
             return;

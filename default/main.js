@@ -37,7 +37,7 @@ module.exports.loop = function () {
                 filter: structure => structure.structureType === STRUCTURE_LAB &&
                     structure.mineralAmount < structure.mineralCapacity
             }).length > 0) {
-            //screepCreator.createSuperEpicScreep('mineralMiner', 1);
+            screepCreator.createSuperEpicScreep('mineralMiner', 1);
         }
 
         // Set up screeps
@@ -45,13 +45,16 @@ module.exports.loop = function () {
         screepCreator.createSuperEpicScreep('upgrader', 3);
         //screepCreator.createSuperEpicScreep('repairer', 2);
 
-        screepCreator.createEpicScreep('builder', 3);
+        //screepCreator.createEpicScreep('builder', 3);
         screepCreator.createEpicScreep('upgrader', 3);
         //screepCreator.createEpicScreep('repairer', 2);
 
-        screepCreator.createDoubleWorkScreeps('builder', 3);
+        //screepCreator.createDoubleWorkScreeps('builder', 3);
         screepCreator.createDoubleCarryScreeps('upgrader', 3);
         //screepCreator.createDoubleWorkScreeps('repairer', 2);
+
+        //screepCreator.createSimpleScreeps('builder', 3);
+        screepCreator.createSimpleScreeps('upgrader', 3);
 
         //screepCreator.createSimpleScreeps('someGuy', 1);
         if (spawn.room.find(FIND_MY_STRUCTURES,
@@ -64,8 +67,6 @@ module.exports.loop = function () {
                 screepCreator.createSimpleAttackScreep('defender', 1);
             }
         }
-        screepCreator.createSimpleScreeps('builder', 3);
-        screepCreator.createSimpleScreeps('upgrader', 3);
 
         if (spawn.room.find(FIND_MY_CREEPS, {
                 filter: creep => creep.memory.role === 'miner'
@@ -80,9 +81,23 @@ module.exports.loop = function () {
 
         //screepCreator.createInvaderScreep('invader', 1);
         //screepCreator.createSuperEpicScreep('foreignUpgrader', 2);
-        //screepCreator.createSuperEpicScreep('foreignBuilder', 3);
-
+        //screepCreator.createSuperEpicScreep('foreignBuilder', 2);
     }
+
+    // Foreigners
+    let foreignUpgraders = _.filter(Game.creeps, {memory: {role: 'foreignUpgrader'}});
+    if (_.size(foreignUpgraders) < 2) {
+        screepCreator.createSuperEpicScreep('foreignUpgrader', 1);
+    }
+    let foreignBuilders = _.filter(Game.creeps, {memory: {role: 'foreignBuilder'}});
+    if (_.size(foreignBuilders) < 2) {
+        screepCreator.createSuperEpicScreep('foreignBuilder', 1);
+    }
+    let invaders = _.filter(Game.creeps, {memory: {role: 'invader'}});
+    if (_.size(invaders) < 1) {
+        //screepCreator.createInvaderScreep('invader', 1)
+    }
+
 
     _.forEach(Game.creeps, function (creep) {
         if (creep.memory.role === 'harvester') {
@@ -138,14 +153,11 @@ module.exports.loop = function () {
         let numberOfContainers = spawn.room.find(FIND_STRUCTURES, {
             filter: structure => structure.structureType === STRUCTURE_CONTAINER
         }).length;
-        numberOfContainers += spawn.room.find(FIND_CONSTRUCTION_SITES, {
-            filter: structure => structure.structureType === STRUCTURE_CONTAINER
-        }).length;
 
         let numberOfSources = spawn.room.find(FIND_SOURCES).length;
         let allCreeps = spawn.room.find(FIND_MY_CREEPS);
 
-        if (spawn.room.controller.level > 1 && numberOfContainers > 0) {
+        if (spawn.room.controller.level > 1 && numberOfContainers >= numberOfSources) {
             screepCreator.createTurboMinerScreep('miner',
                 numberOfContainers >= numberOfSources ? numberOfSources : numberOfContainers,
                 spawn, allCreeps);
