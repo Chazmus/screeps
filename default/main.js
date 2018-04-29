@@ -45,26 +45,23 @@ module.exports.loop = function () {
         screepCreator.createSuperEpicScreep('upgrader', 3);
         //screepCreator.createSuperEpicScreep('repairer', 2);
 
-        //screepCreator.createEpicScreep('builder', 3);
+        screepCreator.createEpicScreep('builder', 3);
         screepCreator.createEpicScreep('upgrader', 3);
         //screepCreator.createEpicScreep('repairer', 2);
 
-        //screepCreator.createDoubleWorkScreeps('builder', 3);
+        screepCreator.createDoubleWorkScreeps('builder', 3);
         screepCreator.createDoubleCarryScreeps('upgrader', 3);
         //screepCreator.createDoubleWorkScreeps('repairer', 2);
 
-        //screepCreator.createSimpleScreeps('builder', 3);
+        screepCreator.createSimpleScreeps('builder', 3);
         screepCreator.createSimpleScreeps('upgrader', 3);
 
         //screepCreator.createSimpleScreeps('someGuy', 1);
         if (spawn.room.find(FIND_MY_STRUCTURES,
                 {filter: structure => structure.structureType === STRUCTURE_TOWER}).length === 0) {
             screepCreator.createSimpleScreeps('repairer', 2);
-
             if (spawn.room.find(FIND_HOSTILE_CREEPS).length) {
                 screepCreator.createSimpleAttackScreep('defender', 3);
-            } else {
-                screepCreator.createSimpleAttackScreep('defender', 1);
             }
         }
 
@@ -85,17 +82,25 @@ module.exports.loop = function () {
     }
 
     // Foreigners
-    let foreignUpgraders = _.filter(Game.creeps, {memory: {role: 'foreignUpgrader'}});
-    if (_.size(foreignUpgraders) < 2) {
-        screepCreator.createSuperEpicScreep('foreignUpgrader', 1);
-    }
-    let foreignBuilders = _.filter(Game.creeps, {memory: {role: 'foreignBuilder'}});
-    if (_.size(foreignBuilders) < 2) {
-        screepCreator.createSuperEpicScreep('foreignBuilder', 1);
-    }
-    let invaders = _.filter(Game.creeps, {memory: {role: 'invader'}});
-    if (_.size(invaders) < 1) {
-        //screepCreator.createInvaderScreep('invader', 1)
+    let GCL = Game.gcl.level;
+    if(GCL > _.size(Game.spawns)){
+        let foreignUpgraders = _.filter(Game.creeps, {memory: {role: 'foreignUpgrader'}});
+        if (_.size(foreignUpgraders) < 2) {
+            screepCreator.createSuperEpicScreep('foreignUpgrader', 1);
+        }
+
+        let foreignBuilders = _.filter(Game.creeps, {memory: {role: 'foreignBuilder'}});
+        if (_.size(foreignBuilders) < 2) {
+            screepCreator.createSuperEpicScreep('foreignBuilder', 1);
+        }
+
+        let roomsWithMyControllers = _.filter(Game.rooms, {controller: {my : true}});
+        if(_.size(roomsWithMyControllers) < GCL){
+            let invaders = _.filter(Game.creeps, {memory: {role: 'invader'}});
+            if (_.size(invaders) < 1) {
+                screepCreator.createInvaderScreep('invader', 1)
+            }
+        }
     }
 
 

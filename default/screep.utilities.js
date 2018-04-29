@@ -42,7 +42,7 @@ let screepUtilities = {
         let targetSourceId = creep.memory.targetSource;
         // If creep has no target source set, set a random one from the room
         if (!targetSourceId) {
-            let droppedEnergies = creep.room.find(FIND_DROPPED_RESOURCES);
+            let droppedEnergies = creep.room.find(FIND_DROPPED_RESOURCES, {filter: resource => resource.resourceType === RESOURCE_ENERGY});
             if (droppedEnergies.length > 0) {
                 return this.collectFromClosestDroppedResource(creep, droppedEnergies);
             }
