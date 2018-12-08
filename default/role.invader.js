@@ -1,11 +1,11 @@
-const roleHarvester = require('role.harvester');
-
 const roleDefender = {
+
+    TARGET_ROOM: "W8N4",
 
     /** @param {Creep} creep **/
     run: function (creep) {
-        if (creep.room.name !== 'W7N4') {
-            const exitDir = Game.map.findExit(creep.room, 'W7N4');
+        if (creep.room.name !== this.TARGET_ROOM) {
+            const exitDir = Game.map.findExit(creep.room, this.TARGET_ROOM);
             const exit = creep.pos.findClosestByRange(exitDir);
             creep.moveTo(exit);
         } else {
